@@ -1,0 +1,156 @@
+import random
+
+class Human:
+    def __init__(self, name, car=None, job=None):
+        self.name = name
+        self.car = car
+        self.job = job
+        self.money = 100
+        self.house = House()
+
+    def work(self):
+        if self.job:
+            self.money += self.job.salary
+            print(f"Я працюю на роботі {self.job.name}, отримуючи ${self.job.salary}")
+        else:
+            print("У мене немає роботи!")
+
+    def eat(self):
+        if self.house.food > 0:
+            food_used = random.randint(1, 10)
+            self.house.food -= food_used
+            self.house.pollution += random.randint(1, 5)
+            print(f"Я поїв, використавши {food_used} одиниць їжі.")
+        else:
+            print("У будинку немає їжі, потрібно сходити в магазин!")
+
+    def shopping(self):
+        if self.money > 0:
+            spend = random.randint(1, 10)
+            self.money -= spend
+            self.house.food += spend
+            print(f"Я купив їжу, витративши ${spend}.")
+        else:
+            print("У мене немає грошей для покупок!")
+
+        if self.car is None:
+            print("Я пішов у магазин пішки.")
+        else:
+            if self.car.drive(random.randint(1, 10) * 10):
+                print("Ми поїхали в магазин.")
+            else:
+                print("Я пішов у магазин пішки.")
+
+    def chill(self):
+        if self.money >= 10:
+            cost = random.randint(10, 20)
+            self.money -= cost
+            self.house.pollution += random.randint(1, 5)
+            print(f"Я відпочив, витративши ${cost}.")
+        else:
+            print("У мене немає грошей для відпочинку!")
+
+    def cleaning(self):
+        cleaning_power = random.randint(5, 15)
+        if self.house.pollution >= cleaning_power:
+            self.house.pollution -= cleaning_power
+            print(f"Я прибрав у будинку, знизивши рівень забруднення на {cleaning_power}.")
+        else:
+            self.house.pollution = 0
+            print("Будинок тепер ідеально чистий!")
+
+    def info(self):
+        print(f"Інформація про {self.name}:")
+        print(f"Гроші: ${self.money}")
+        print(self.house)
+        if self.car:
+            print(self.car)
+        if self.job:
+            print(self.job)
+
+    def live(self, day):
+        print(f"\nДень №{day}")
+        choice = random.randint(1, 5)
+        if choice == 1:
+            self.work()
+        elif choice == 2:
+            self.shopping()
+        elif choice == 3:
+            self.eat()
+        elif choice == 4:
+            self.chill()
+        elif choice == 5:
+            self.cleaning()
+
+        if self.money > 1000 and self.car is None:
+            print("Купую авто!")
+            self.money -= 500
+            self.car = Car("BMW X13")
+
+        self.info()
+
+    def is_alive(self):
+        if self.money < 0:
+            print("Ви збанкрутували!")
+            return False
+        if self.house.pollution > 100:
+            print("Будинок занадто забруднений! Потрібно прибратися.")
+            return False
+        return True
+
+
+class House:
+    def __init__(self):
+        self.food = 50
+        self.pollution = 0
+
+    def __str__(self):
+        return f"Будинок: їжа - {self.food}, забруднення - {self.pollution}."
+
+
+class Car:
+    def __init__(self, model):
+        self.model = model
+        self.fuel = 60  # літри
+        self.state = 100  # відсотки
+
+    def drive(self, length):
+        fuel_consumption = length * 0.1
+        if self.fuel - fuel_consumption < 0:
+            print("Не вистачає пального!")
+            return False
+        else:
+            self.fuel -= fuel_consumption
+            self.state -= length * 0.01
+            print(f"Авто проїхало {length} км, витративши {fuel_consumption:.1f} літрів пального.")
+            return True
+
+    def add_fuel(self, fuel):
+        if self.fuel + fuel <= 60:
+            self.fuel += fuel
+            print(f"Додано {fuel} літрів пального. Тепер у баку {self.fuel:.1f} літрів.")
+        else:
+            self.fuel = 60
+            print("Бак повний!")
+
+    def __str__(self):
+        return f"Авто {self.model}: пальне - {self.fuel:.1f} л, стан - {self.state:.1f} %."
+
+
+class Job:
+    def __init__(self, name, salary):
+        self.name = name
+        self.salary = salary
+
+    def __str__(self):
+        return f"Робота: {self.name}, зарплата: ${self.salary}."
+
+
+# Тестування
+job = Job("Програміст", 100)
+human = Human("Антон", job=job)
+
+for day in range(1, 366):
+    if not human.is_alive():
+        break
+    human.live(day)
