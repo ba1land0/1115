@@ -1,0 +1,86 @@
+class Zoo:
+    def __init__(self):
+        self.animals = []  # Список для зберігання тварин у зоопарку
+
+    def add_animal(self, animal):
+        """Додає тварину до зоопарку."""
+        if isinstance(animal, Animal):  # Перевірка, чи є об'єкт тваринкою
+            self.animals.append(animal)
+            print(f"{animal.__class__.__name__} додано до зоопарку!")
+        else:
+            print("Це не тварина і не може бути додано до зоопарку.")
+
+    def show_all(self):
+        """Відображає інформацію про всіх тварин у зоопарку."""
+        if not self.animals:
+            print("У зоопарку немає тварин.")
+            return
+        print("\nТварини у зоопарку:")
+        for animal in self.animals:
+            animal.info()
+
+    def interact(self):
+        """Взаємодія з усіма тваринами."""
+        if not self.animals:
+            print("У зоопарку немає тварин для взаємодії.")
+            return
+        for animal in self.animals:
+            if isinstance(animal, Cat):
+                animal.cathMouse()
+            elif isinstance(animal, Mammals):
+                animal.move()
+            else:
+                print(f"{animal.__class__.__name__} не має спеціальної взаємодії.")
+
+# Додаємо класи для інших тварин
+
+class Dog(Mammals):
+    def __init__(self, name, tricks):
+        self.__tricks = tricks
+        super().__init__(name)
+
+    def info(self):
+        super().info()
+        print("Tricks: ", self.__tricks)
+
+    def learn_trick(self):
+        print("Я вивчив новий трюк!")
+        self.__tricks += 1
+
+
+class GoldenFish(Fish):
+    def __init__(self, name, wishes):
+        self.__wishes = wishes
+        super().__init__(name)
+
+    def info(self):
+        super().info()
+        print("Wishes granted: ", self.__wishes)
+
+    def grant_wish(self):
+        if self.__wishes > 0:
+            print("Золота рибка виконала бажання!")
+            self.__wishes -= 1
+        else:
+            print("У Золотої рибки більше немає сил виконувати бажання.")
+
+# Створюємо зоопарк
+zoo = Zoo()
+
+# Додаємо тварин до зоопарку
+cat = Cat("Tom", 10)
+dog = Dog("Spike", 5)
+fish = GoldenFish("Goldie", 3)
+
+zoo.add_animal(cat)
+zoo.add_animal(dog)
+zoo.add_animal(fish)
+
+# Відображення всіх тварин у зоопарку
+zoo.show_all()
+
+# Взаємодія з тваринами
+zoo.interact()
+
+# Показуємо оновлену інформацію про тварин
+zoo.show_all()
