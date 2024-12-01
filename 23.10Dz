@@ -1,0 +1,86 @@
+import random
+
+class Pet:
+    def __init__(self, name, pet_type="cat"):
+        self.name = name
+        self.type = pet_type.lower()  # тип (кіт/пес)
+        self.hunger = 50  # рівень голоду (0 - ситий, 100 - голодний)
+        self.energy = 50  # рівень енергії (0 - втомлений, 100 - повний сил)
+        self.happiness = 50  # рівень щастя (0 - сумний, 100 - щасливий)
+
+    def feed(self):
+        """Годування улюбленця"""
+        if self.hunger > 0:
+            food = random.randint(10, 30)
+            self.hunger = max(0, self.hunger - food)
+            self.happiness += 10
+            print(f"{self.name} поїв! Рівень голоду зменшився на {food}.")
+        else:
+            print(f"{self.name} не голодний.")
+
+    def sleep(self):
+        """Улюбленець спить"""
+        if self.energy < 100:
+            sleep_time = random.randint(20, 40)
+            self.energy = min(100, self.energy + sleep_time)
+            print(f"{self.name} поспав і відновив {sleep_time} енергії.")
+        else:
+            print(f"{self.name} не хоче спати.")
+
+    def play(self):
+        """Гра з улюбленцем"""
+        if self.energy > 10:
+            play_time = random.randint(15, 25)
+            self.happiness = min(100, self.happiness + play_time)
+            self.energy -= 10
+            print(f"{self.name} грається! Щастя збільшилося на {play_time}.")
+        else:
+            print(f"{self.name} занадто втомлений для гри.")
+
+    def status(self):
+        """Вивід стану улюбленця"""
+        print(f"\nІнформація про {self.name}:")
+        print(f"Тип: {'Кіт' if self.type == 'cat' else 'Пес'}")
+        print(f"Голод: {self.hunger}/100")
+        print(f"Енергія: {self.energy}/100")
+        print(f"Щастя: {self.happiness}/100")
+
+    def is_alive(self):
+        """Перевірка, чи улюбленець живий"""
+        if self.hunger >= 100:
+            print(f"{self.name} помер від голоду... :(")
+            return False
+        if self.happiness <= 0:
+            print(f"{self.name} впав у депресію і більше не хоче грати...")
+            return False
+        if self.energy <= 0:
+            print(f"{self.name} занадто виснажений і потребує відпочинку.")
+            return False
+        return True
+
+    def live_one_day(self):
+        """Життя улюбленця за один день"""
+        print(f"\nДень з {self.name}:")
+        action = random.choice(["feed", "play", "sleep"])
+        if action == "feed":
+            self.feed()
+        elif action == "play":
+            self.play()
+        elif action == "sleep":
+            self.sleep()
+
+        # Поступово зростає голод, знижується щастя
+        self.hunger += random.randint(5, 10)
+        self.happiness -= random.randint(1, 5)
+        self.energy -= random.randint(5, 15)
+
+        self.status()
+
+# Створення улюбленця
+my_pet = Pet(name="Сніжок", pet_type="cat")
+
+# Симуляція життя
+for day in range(1, 8):  # Тиждень життя
+    if not my_pet.is_alive():
+        break
+    my_pet.live_one_day()
