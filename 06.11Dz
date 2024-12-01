@@ -1,0 +1,52 @@
+class Vehicle:
+    def __init__(self, brand, max_speed):
+        self.brand = brand
+        self.max_speed = max_speed
+
+    def drive(self):
+        print(f"{self.brand} їде зі швидкістю до {self.max_speed} км/год.")
+
+    def stop(self):
+        print(f"{self.brand} зупинився.")
+
+
+class Weapon:
+    def __init__(self, weapon_type, damage):
+        self.weapon_type = weapon_type
+        self.damage = damage
+
+    def attack(self):
+        print(f"Атакую за допомогою {self.weapon_type}, завдаючи {self.damage} одиниць шкоди.")
+
+    def reload(self):
+        print(f"Перезарядка {self.weapon_type} завершена.")
+
+
+class ArmoredVehicle(Vehicle, Weapon):
+    def __init__(self, brand, max_speed, weapon_type, damage, armor):
+        # Виклик ініціалізаторів батьківських класів
+        Vehicle.__init__(self, brand, max_speed)
+        Weapon.__init__(self, weapon_type, damage)
+        self.armor = armor  # Унікальний атрибут дочірнього класу
+
+    def defend(self):
+        print(f"{self.brand} використовує броню рівнем {self.armor} для захисту.")
+
+    def info(self):
+        print(f"Броньований транспорт {self.brand}:")
+        print(f"  - Максимальна швидкість: {self.max_speed} км/год")
+        print(f"  - Тип зброї: {self.weapon_type}")
+        print(f"  - Шкода зброї: {self.damage}")
+        print(f"  - Рівень броні: {self.armor}")
+
+
+# Створення об'єкта дочірнього класу
+tank = ArmoredVehicle(brand="Танк Т-90", max_speed=60, weapon_type="Гармата", damage=120, armor=300)
+
+# Використання методів і атрибутів
+tank.info()
+tank.drive()
+tank.attack()
+tank.defend()
+tank.reload()
+tank.stop()
