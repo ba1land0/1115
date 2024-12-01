@@ -1,0 +1,48 @@
+users_db = {}  # Словник для зберігання логінів і паролів
+
+
+def register():
+    """Реєстрація нового користувача."""
+    while True:
+        login = input("Введіть логін для реєстрації: ")
+        if login in users_db:
+            print("Вибачте, цей логін вже зайнятий. Спробуйте інший.")
+        else:
+            password = input("Введіть пароль: ")
+            users_db[login] = password
+            print("Реєстрація успішна!")
+            break
+
+
+def login():
+    """Вхід до системи для зареєстрованого користувача."""
+    login = input("Введіть ваш логін: ")
+    password = input("Введіть ваш пароль: ")
+    if login in users_db and users_db[login] == password:
+        print("Ура, ви увійшли на сайт!")
+    else:
+        print("Вибачте, логін або пароль невірний.")
+
+
+def main():
+    """Головна функція програми."""
+    while True:
+        print("\nЩо ви хочете зробити?")
+        print("1. Увійти")
+        print("2. Зареєструватися")
+        print("3. Вийти з програми")
+        choice = input("Виберіть опцію (1/2/3): ")
+
+        if choice == '1':
+            login()
+        elif choice == '2':
+            register()
+        elif choice == '3':
+            print("Дякуємо за використання програми. До побачення!")
+            break
+        else:
+            print("Невірний вибір. Спробуйте ще раз.")
+
+
+# Запуск програми
+main()
